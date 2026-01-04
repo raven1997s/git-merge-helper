@@ -1,0 +1,11 @@
+{
+  "name": "git-merge-helper",
+  "version": "2.2.0",
+  "description": "智能 Git 分支合并助手 - 安全、自动化地完成分支合并操作",
+  "author": {
+    "name": "Your Name"
+  },
+  "repository": "https://github.com/raven1997s/git-merge-helper",
+  "license": "MIT",
+  "keywords": ["git", "merge", "branch", "automation", "workflow", "claude-code"]
+}
