@@ -4,7 +4,8 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Skill-blue)](https://code.claude.com/docs/en/skills)
-[![Version](https://img.shields.io/badge/version-2.2.0-green)](https://github.com/raven1997s/git-merge-helper)
+[![Version](https://img.shields.io/badge/version-2.2.0-green)](https://github.com/raven1997s/git-merge-helper/releases)
+[![Stars](https://img.shields.io/github/stars/raven1997s/git-merge-helper?style=social)](https://github.com/raven1997s/git-merge-helper/stargazers)
 
 ## 特性
 
