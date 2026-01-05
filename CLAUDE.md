@@ -8,5 +8,5 @@
 
 ## Commands
 
-- **merge**: `python3 .claude/skills/git-merge-helper/scripts/merge_executor.py` - Safely merges current branch to target (default: main).
-- **mh**: `python3 .claude/skills/git-merge-helper/scripts/merge_executor.py` - Alias for merge.
+- **mh**: `python3 .claude/skills/git-merge-helper/scripts/merge_executor.py` - Safely merges current branch to target (default: main).
+- **merge-helper**: `python3 .claude/skills/git-merge-helper/scripts/merge_executor.py` - Alias for mh.
