@@ -14,7 +14,7 @@ description: |
   5. Do NOT output any conversational text or explanations.
   6. Output ONLY the raw output from the execution.
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash(python3:*)
-version: 2.2.1
+version: 2.2.0
 author: Claude Code
 ---
 
