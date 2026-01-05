@@ -20,6 +20,22 @@
 
 ## 安装
 
+## ⚡️ Quick Integration (Add to YOUR Project)
+
+Want to use this tool in your own repository? Just run this in your project root:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/raven1997s/git-merge-helper/main/templates/install-in-project.sh)"
+```
+
+This will automatically:
+1.  Download the skill to `.claude/skills/git-merge-helper`.
+2.  Unlock `/mh` and `/merge-helper` commands in your `CLAUDE.md`.
+
+No global installation required! Everyone on your team gets it instantly after `git pull`.
+
+## 安装 (Global/Local Manual)
+
 ### 方式一：从 GitHub 安装 Plugin（推荐 - 支持 Slash Command）
 
 ```bash
