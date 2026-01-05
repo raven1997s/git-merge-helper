@@ -1,0 +1,37 @@
+{
+    "name": "git-merge-helper",
+    "owner": {
+        "name": "raven1997s",
+        "email": "raven@example.com",
+        "url": "https://github.com/raven1997s"
+    },
+    "metadata": {
+        "description": "智能 Git 分支合并助手 - 安全、自动化地完成分支合并操作",
+        "version": "2.2.0",
+        "homepage": "https://github.com/raven1997s/git-merge-helper",
+        "pluginRoot": "./plugin",
+        "totalPlugins": 1,
+        "lastUpdated": "2026-01-05"
+    },
+    "plugins": [
+        {
+            "name": "git-merge-helper",
+            "source": "./plugin",
+            "description": "智能 Git 分支合并助手 - 安全、自动化地完成分支合并操作",
+            "version": "2.2.0",
+            "category": "development",
+            "keywords": [
+                "git",
+                "merge",
+                "branch",
+                "automation",
+                "workflow",
+                "claude-code"
+            ],
+            "author": {
+                "name": "raven1997s",
+                "url": "https://github.com/raven1997s/git-merge-helper"
+            }
+        }
+    ]
+}

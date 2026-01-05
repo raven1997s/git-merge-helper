@@ -20,30 +20,69 @@
 
 ## 安装
 
-### 方式一：作为 Claude Code Skill（推荐）
+### 方式一：从 GitHub 安装 Plugin（推荐 - 支持 Slash Command）
 
 ```bash
-# 复制技能到项目
-cp -r skill/git-merge-helper ~/.claude/skills/
+# 1. 添加 GitHub 仓库作为 marketplace
+claude plugin marketplace add https://github.com/raven1997s/git-merge-helper
 
-# 或复制到项目
-cp -r skill/git-merge-helper .claude/skills/
+# 2. 安装插件
+claude plugin install git-merge-helper@git-merge-helper
 ```
 
-### 方式二：作为 Claude Code 插件
-
-```bash
-# 安装插件
-cd /path/to/git-merge-helper
-plugin install ./
-```
-
-使用 Slash Command：
+安装后可使用：
 ```bash
 /merge-helper test    # 合并到 test 分支
 /mh test              # 合并到 test 分支（简写）
 /merge-helper master  # 合并到 master 分支
 ```
+
+### 方式二：安装 Skill（支持自然语言触发）
+
+```bash
+# 克隆仓库
+git clone https://github.com/raven1997s/git-merge-helper.git
+
+# 复制 Skill 到全局目录（所有项目可用）
+cp -r git-merge-helper/skill/git-merge-helper ~/.claude/skills/
+
+# 或复制到当前项目（仅当前项目可用）
+mkdir -p .claude/skills
+cp -r git-merge-helper/skill/git-merge-helper .claude/skills/
+```
+
+安装后可使用自然语言：
+```
+帮我合并到 test
+合并当前分支到 master
+merge helper dev
+```
+
+### 方式三：完整安装（推荐 - 支持所有触发方式）
+
+同时安装 Plugin 和 Skill，获得完整体验：
+
+```bash
+# 1. 克隆仓库
+git clone https://github.com/raven1997s/git-merge-helper.git
+cd git-merge-helper
+
+# 2. 安装 Plugin（Slash Command）
+claude plugin marketplace add ./
+claude plugin install git-merge-helper@git-merge-helper
+
+# 3. 安装 Skill（自然语言）
+cp -r skill/git-merge-helper ~/.claude/skills/
+
+# 4. 重启 Claude Code 生效
+```
+
+### 触发方式对比
+
+| 触发方式 | 示例 | 需要安装 |
+|---------|------|---------|
+| Slash Command | `/merge-helper test`、`/mh test` | Plugin |
+| 自然语言 | "帮我合并到 test" | Skill |
 
 ## 快速开始
 

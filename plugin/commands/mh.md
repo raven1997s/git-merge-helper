@@ -1,12 +1,13 @@
 ---
-name: merge-helper
-description: 快速执行分支合并
-shortcut: mh
+name: mh
+description: 快速执行分支合并（merge-helper 简写）
 argument-hint: <target-branch>
 allowed-tools: [Read, Bash(python3:.claude/skills/*/scripts/*), Bash(git:*)]
 ---
 
-# Git Merge 命令
+# Git Merge 命令 (简写)
+
+这是 `/merge-helper` 的简写形式。
 
 快速执行分支合并到目标分支。
 
@@ -16,9 +17,9 @@ allowed-tools: [Read, Bash(python3:.claude/skills/*/scripts/*), Bash(git:*)]
 
 ## 示例
 
-- `/merge-helper test` - 合并到 test 分支
-- `/merge-helper master` - 合并到 master 分支
-- `/merge-helper dev env` - 批量合并到多个分支
+- `/mh test` - 合并到 test 分支
+- `/mh master` - 合并到 master 分支
+- `/mh dev env` - 批量合并到多个分支
 
 ## 执行流程
 
