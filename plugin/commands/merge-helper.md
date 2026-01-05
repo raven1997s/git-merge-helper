@@ -14,9 +14,9 @@ allowed-tools: [Read, Bash(python3:.claude/skills/*/scripts/*), Bash(git:*)]
 
 ## 示例
 
-- `/merge test` - 合并到 test 分支
-- `/merge master` - 合并到 master 分支
-- `/merge dev env` - 批量合并到多个分支
+- `/merge-helper test` - 合并到 test 分支
+- `/merge-helper master` - 合并到 master 分支
+- `/merge-helper dev env` - 批量合并到多个分支
 
 ## 执行流程
 
