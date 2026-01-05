@@ -2,9 +2,11 @@
 name: git-merge-helper
 invocable: /merge-helper /mh
 description: |
-  智能 Git 分支合并助手。通过 /merge-helper、/mh、"合并分支"、"merge helper"、"帮我合并到 test/master"触发。
-  自动执行安全的分支合并流程：创建临时分支、检测冲突、自动回滚、生成详细日志。
-  支持批量合并、冲突解决建议、日志清理、网络重试、状态检查、配置化管理。
+  智能 Git 分支合并助手。
+  **Rules:**
+  1. Execute `python3 .claude/skills/git-merge-helper/scripts/merge_executor.py [target_branch]`
+  2. Do NOT output conversational text.
+  3. Just show the script output.
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash(git:*)
 version: 2.2.0
 author: Claude Code

@@ -11,6 +11,11 @@ allowed-tools: [Read, Bash(python3:.claude/skills/*/scripts/*), Bash(git:*)]
 
 快速执行分支合并到目标分支。
 
+**Rules:**
+1. Execute `python3 .claude/skills/git-merge-helper/scripts/merge_executor.py $ARGUMENTS`
+2. Do NOT output conversational text.
+3. Just show the script output.
+
 ## 参数
 
 使用 `$ARGUMENTS` 访问用户传入的目标分支。
