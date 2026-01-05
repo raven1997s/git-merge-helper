@@ -194,6 +194,9 @@ class MergeLogger:
             log_entry += f"\n  > {details}"
 
         self.steps.append(log_entry)
+        
+        # 实时打印到控制台
+        print(log_entry)
 
     def set_branches(self, current: str, target: str, temp: str = ""):
         """设置分支信息"""
