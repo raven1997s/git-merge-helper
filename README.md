@@ -84,6 +84,38 @@ cp -r skill/git-merge-helper ~/.claude/skills/
 | Slash Command | `/merge-helper test`、`/mh test` | Plugin |
 | 自然语言 | "帮我合并到 test" | Skill |
 
+### 方式四：团队项目集成
+
+如果你想让团队成员拉取项目后也能使用快捷命令，可以在项目中添加安装脚本：
+
+```bash
+# 1. 在项目中创建脚本目录
+mkdir -p scripts
+
+# 2. 下载安装脚本
+curl -o scripts/setup-claude-merge-helper.sh \
+  https://raw.githubusercontent.com/raven1997s/git-merge-helper/main/templates/setup-claude-merge-helper.sh
+chmod +x scripts/setup-claude-merge-helper.sh
+
+# 3. 添加 CLAUDE.md（可选，用于说明）
+curl -o CLAUDE.md \
+  https://raw.githubusercontent.com/raven1997s/git-merge-helper/main/templates/CLAUDE.md
+
+# 4. 提交到项目
+git add scripts/setup-claude-merge-helper.sh CLAUDE.md
+git commit -m "feat: 添加 Claude Code 分支合并插件支持"
+```
+
+团队成员使用：
+```bash
+# 拉取项目后，运行一次安装脚本
+./scripts/setup-claude-merge-helper.sh
+
+# 之后就可以使用
+/mh test
+/merge-helper dev
+```
+
 ## 快速开始
 
 ### 前置条件
