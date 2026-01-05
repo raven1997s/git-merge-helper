@@ -84,37 +84,63 @@ cp -r skill/git-merge-helper ~/.claude/skills/
 | Slash Command | `/merge-helper test`、`/mh test` | Plugin |
 | 自然语言 | "帮我合并到 test" | Skill |
 
-### 方式四：团队项目集成
+### 方式四：团队项目集成（推荐）
 
-如果你想让团队成员拉取项目后也能使用快捷命令，可以在项目中添加安装脚本：
+让团队成员拉取项目后就能使用。有两种方案：
+
+#### 方案 A：内嵌 Skill（自然语言拉取即用 ✅）
+
+将 Skill 源码直接放入项目，同事拉取后**无需任何安装**即可使用自然语言：
 
 ```bash
-# 1. 在项目中创建脚本目录
-mkdir -p scripts
+# 1. 克隆 git-merge-helper 仓库
+git clone https://github.com/raven1997s/git-merge-helper.git /tmp/gmh
 
-# 2. 下载安装脚本
+# 2. 复制 Skill 到你的项目
+mkdir -p .claude/skills
+cp -r /tmp/gmh/skill/git-merge-helper .claude/skills/
+
+# 3. 复制 CLAUDE.md 和安装脚本（可选，用于 Slash Command）
+cp /tmp/gmh/templates/project-integration/CLAUDE.md ./
+mkdir -p scripts
+cp /tmp/gmh/templates/project-integration/scripts/setup-claude-merge-helper.sh scripts/
+chmod +x scripts/setup-claude-merge-helper.sh
+
+# 4. 清理并提交
+rm -rf /tmp/gmh
+git add .claude/skills CLAUDE.md scripts/
+git commit -m "feat: 添加 Claude Code 分支合并支持"
+```
+
+**团队成员使用**：
+```bash
+# 拉取项目后直接使用自然语言（无需安装！）
+claude
+> 帮我合并到 test
+
+# 如果想用 Slash Command，运行一次安装脚本
+./scripts/setup-claude-merge-helper.sh
+> /mh test
+```
+
+#### 方案 B：仅安装脚本
+
+只添加安装脚本，同事需要运行一次才能使用：
+
+```bash
+mkdir -p scripts
 curl -o scripts/setup-claude-merge-helper.sh \
   https://raw.githubusercontent.com/raven1997s/git-merge-helper/main/templates/setup-claude-merge-helper.sh
 chmod +x scripts/setup-claude-merge-helper.sh
-
-# 3. 添加 CLAUDE.md（可选，用于说明）
-curl -o CLAUDE.md \
-  https://raw.githubusercontent.com/raven1997s/git-merge-helper/main/templates/CLAUDE.md
-
-# 4. 提交到项目
-git add scripts/setup-claude-merge-helper.sh CLAUDE.md
-git commit -m "feat: 添加 Claude Code 分支合并插件支持"
+git add scripts/ && git commit -m "feat: 添加 Claude Code 分支合并支持"
 ```
 
-团队成员使用：
-```bash
-# 拉取项目后，运行一次安装脚本
-./scripts/setup-claude-merge-helper.sh
+#### 方案对比
 
-# 之后就可以使用
-/mh test
-/merge-helper dev
-```
+| 方案 | 自然语言 | Slash Command | 需要安装 |
+|-----|---------|--------------|---------|
+| **A: 内嵌 Skill** | ✅ 拉取即用 | ✅ 运行脚本后 | 部分 |
+| **B: 仅脚本** | ✅ 运行脚本后 | ✅ 运行脚本后 | 必须 |
 
 ## 快速开始
 
