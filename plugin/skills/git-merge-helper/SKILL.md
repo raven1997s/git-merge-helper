@@ -1,6 +1,6 @@
 ---
 name: git-merge-helper
-invocable: merge-helper mh
+invocable: /merge-helper /mh
 description: |
   智能 Git 分支合并助手。通过 /merge-helper、/mh、"合并分支"、"merge helper"、"帮我合并到 test/master"触发。
   自动执行安全的分支合并流程：创建临时分支、检测冲突、自动回滚、生成详细日志。
