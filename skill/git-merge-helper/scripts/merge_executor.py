@@ -673,8 +673,8 @@ class MergeExecutor:
         self.logger.set_result("SUCCESS")
         self.logger.save()
 
-        print(f"\n✅ 成功合并到 {target_branch} 分支")
-        self.logger.print_log_link()
+        # 打印摘要
+        self.logger.print_summary()
 
         return True
 

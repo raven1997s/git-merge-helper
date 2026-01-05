@@ -64,21 +64,20 @@ except ImportError:
 class MergeLogger:
     """合并日志记录器"""
 
-    def __init__(self, project_root: Optional[Path] = None):
+    def __init__(self, project_root: Optional[Path] = None, verbose: bool = False):
         """
         初始化日志记录器
 
         Args:
             project_root: 项目根目录，默认为当前目录向上查找 Git 仓库
-
-        Raises:
-            RuntimeError: 如果未找到 Git 仓库或无权限创建日志目录
+            verbose: 是否实时打印所有日志到控制台
         """
         if project_root is None:
             # 使用共享的 Git 仓库查找逻辑
             project_root = GitRepository.find_root()
 
         self.project_root = project_root
+        self.verbose = verbose
         self.logs_dir = project_root / ".claude" / "logs"
 
         # 检查并创建日志目录，处理权限问题
@@ -195,8 +194,31 @@ class MergeLogger:
 
         self.steps.append(log_entry)
         
-        # 实时打印到控制台
-        print(log_entry)
+        # 实时打印到控制台 (仅在 verbose模式 或 警告/错误 时打印)
+        if self.verbose or level in ["WARNING", "ERROR"]:
+            print(log_entry)
+
+    def print_summary(self):
+        """打印合并结果摘要"""
+        print(f"\n{'='*60}")
+        if self.status == "SUCCESS":
+            print(f"✅ 合并成功")
+        else:
+            print(f"❌ 合并失败: {self.status}")
+            if self.reason:
+                print(f"   原因: {self.reason}")
+        
+        print(f"\n📋 合并详情：")
+        print(f"  - 源分支: {self.current_branch}")
+        if self.is_batch_merge:
+            print(f"  - 目标分支: {', '.join(self.target_branches)}")
+            print(f"  - 包含的新提交: 多个分支")
+        else:
+            print(f"  - 目标分支: {self.target_branch}")
+            # 注意：新提交数量可能不在 self 中，这里简化处理
+        
+        # 打印日志文件路径
+        self.print_log_link()
 
     def set_branches(self, current: str, target: str, temp: str = ""):
         """设置分支信息"""
