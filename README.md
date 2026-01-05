@@ -101,9 +101,9 @@ mkdir -p .claude/skills
 cp -r /tmp/gmh/skill/git-merge-helper .claude/skills/
 
 # 3. 复制 CLAUDE.md 和安装脚本（可选，用于 Slash Command）
-cp /tmp/gmh/templates/project-integration/CLAUDE.md ./
+cp /tmp/gmh/templates/project-CLAUDE.md ./CLAUDE.md
 mkdir -p scripts
-cp /tmp/gmh/templates/project-integration/scripts/setup-claude-merge-helper.sh scripts/
+cp /tmp/gmh/templates/setup-plugin-only.sh scripts/setup-claude-merge-helper.sh
 chmod +x scripts/setup-claude-merge-helper.sh
 
 # 4. 清理并提交
