@@ -1,17 +1,19 @@
 #!/bin/bash
 # ============================================
-# Claude Code Git Merge Helper 完整安装脚本
-# 安装后支持：
-#   - /mh test, /merge-helper test (Slash Command)
-#   - "帮我合并到 test" (自然语言)
+# Claude Code Git Merge Helper - Plugin 安装脚本
+# 用于内嵌 Skill 的项目，只需安装 Plugin
+# 
+# Skill 已内置在项目的 .claude/skills/ 目录中
+# 此脚本只安装 Plugin 以启用 /mh 和 /merge-helper 命令
 # ============================================
 
 set -e
 
 REPO_URL="https://github.com/raven1997s/git-merge-helper"
-SKILL_DIR="$HOME/.claude/skills/git-merge-helper"
 
-echo "🚀 正在安装 Claude Code Git Merge Helper..."
+echo "🚀 正在安装 Claude Code Git Merge Helper Plugin..."
+echo ""
+echo "📝 注意: Skill 已内置在项目中，自然语言功能无需安装"
 echo ""
 
 # 检查 claude 命令是否存在
@@ -24,7 +26,7 @@ fi
 # ==========================================
 # 安装 Plugin (支持 Slash Command)
 # ==========================================
-echo "📦 [1/2] 安装 Plugin (支持 /mh, /merge-helper)..."
+echo "📦 安装 Plugin (支持 /mh, /merge-helper)..."
 
 # 添加 marketplace
 claude plugin marketplace add "$REPO_URL" 2>/dev/null || true
@@ -35,51 +37,19 @@ claude plugin install git-merge-helper@git-merge-helper 2>/dev/null || {
     claude plugin update git-merge-helper@git-merge-helper 2>/dev/null || true
 }
 
-echo "✅ Plugin 安装完成"
 echo ""
-
-# ==========================================
-# 安装 Skill (支持自然语言)
-# ==========================================
-echo "📦 [2/2] 安装 Skill (支持自然语言触发)..."
-
-# 创建临时目录
-TEMP_DIR=$(mktemp -d)
-trap "rm -rf $TEMP_DIR" EXIT
-
-# 克隆仓库
-echo "   下载 Skill 源码..."
-git clone --depth 1 --quiet "$REPO_URL" "$TEMP_DIR/git-merge-helper"
-
-# 创建 skills 目录
-mkdir -p "$HOME/.claude/skills"
-
-# 复制 skill
-if [ -d "$SKILL_DIR" ]; then
-    echo "   更新现有 Skill..."
-    rm -rf "$SKILL_DIR"
-fi
-cp -r "$TEMP_DIR/git-merge-helper/skill/git-merge-helper" "$SKILL_DIR"
-
-echo "✅ Skill 安装完成"
-echo ""
-
-# ==========================================
-# 完成
-# ==========================================
 echo "============================================"
 echo "🎉 安装完成！"
 echo "============================================"
 echo ""
 echo "支持的触发方式："
 echo ""
-echo "  Slash Command:"
+echo "  Slash Command (需要此脚本安装):"
 echo "    /mh test              # 合并到 test 分支"
 echo "    /merge-helper dev     # 合并到 dev 分支"
 echo ""
-echo "  自然语言:"
+echo "  自然语言 (已内置，无需安装):"
 echo "    帮我合并到 test"
 echo "    合并当前分支到 master"
 echo ""
 echo "💡 提示: 请重启 Claude Code 以使更改生效"
-echo "   退出当前 claude 会话后重新运行 'claude' 命令"
