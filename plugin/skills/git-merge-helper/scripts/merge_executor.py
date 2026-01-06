@@ -196,7 +196,7 @@ class MergeExecutor:
 
     def create_temp_branch(self, target_branch: str) -> bool:
         """
-        创建临时分支
+        创建临时分支（从远程最新状态创建）
 
         Args:
             target_branch: 目标分支名
@@ -204,20 +204,41 @@ class MergeExecutor:
         Returns:
             是否创建成功
         """
+        remote = self._get_remote_name()
         current_branch = self.logger.current_branch
         timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
         self.temp_branch = f"merge-{current_branch}-to-{target_branch}-{timestamp}"
 
+        # 先拉取远程分支最新代码
+        self.logger.log("INFO", f"拉取 {target_branch} 最新代码", f"从 {remote} 获取")
+        fetch_result = self.network_helper.fetch_branch(target_branch, remote=remote)
+
+        if not fetch_result.success:
+            # Fetch 失败，尝试继续（可能是网络问题或分支不存在）
+            self.logger.log("WARNING", f"拉取 {target_branch} 失败", fetch_result.stderr or "继续尝试创建临时分支")
+
+        # 从远程引用创建临时分支（确保基于最新代码）
         result = self.run_git(
-            ["checkout", "-b", self.temp_branch, target_branch],
+            ["checkout", "-b", self.temp_branch, f"{remote}/{target_branch}"],
             check=False
         )
 
         if result.returncode != 0:
-            self.logger.log("ERROR", "创建临时分支失败", result.stderr)
-            return False
+            # 如果从远程引用创建失败，尝试从本地创建
+            self.logger.log("WARNING", "从远程引用创建失败，尝试从本地创建", result.stderr)
+            result = self.run_git(
+                ["checkout", "-b", self.temp_branch, target_branch],
+                check=False
+            )
 
-        self.logger.log("INFO", "创建临时分支", self.temp_branch)
+            if result.returncode != 0:
+                self.logger.log("ERROR", "创建临时分支失败", result.stderr)
+                return False
+            else:
+                self.logger.log("INFO", "创建临时分支", f"{self.temp_branch} (基于本地 {target_branch})")
+        else:
+            self.logger.log("INFO", "创建临时分支", f"{self.temp_branch} (基于 {remote}/{target_branch})")
+
         self.logger.set_branches(current_branch, target_branch, self.temp_branch)
         return True
 
@@ -378,6 +399,26 @@ class MergeExecutor:
             self.logger.log("ERROR", f"推送 {target_branch} 失败", error_msg)
             if result.retries > 0:
                 self.logger.log("INFO", "重试信息", f"已重试 {result.retries} 次")
+
+            # 检测是否为 non-fast-forward 错误
+            stderr_lower = result.stderr.lower()
+            if "non-fast-forward" in stderr_lower or "rejected" in stderr_lower:
+                # 远程分支有更新，给出详细提示
+                self.logger.log("WARNING", "远程分支有新变更",
+                              f"{remote}/{target_branch} 有新的提交，请先拉取最新代码")
+
+                # 清理远程临时分支（如果已推送）
+                if self.temp_branch:
+                    cleanup_result = self.network_helper.run_git_with_retry(
+                        ["push", remote, "--delete", self.temp_branch],
+                        operation_name=f"清理远程临时分支 {self.temp_branch}",
+                        check_remote=True
+                    )
+                    if cleanup_result.success:
+                        self.logger.log("INFO", "已清理远程临时分支", self.temp_branch)
+                    else:
+                        self.logger.log("WARNING", "清理远程临时分支失败", "请手动删除")
+
             return False
 
         self.logger.log("SUCCESS", f"推送 {target_branch} 分支",
@@ -673,8 +714,8 @@ class MergeExecutor:
         self.logger.set_result("SUCCESS")
         self.logger.save()
 
-        print(f"\n✅ 成功合并到 {target_branch} 分支")
-        self.logger.print_log_link()
+        # 打印摘要
+        self.logger.print_summary()
 
         return True
 
