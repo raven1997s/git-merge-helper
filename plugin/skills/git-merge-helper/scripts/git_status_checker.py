@@ -122,11 +122,17 @@ class GitStatusChecker:
         result["has_assume_unchanged"] = self._check_assume_unchanged()
 
         # 判断是否干净
-        # 忽略 .DS_Store 和 .claude 目录
-        filtered_items = [
-            item for item in result["items"]
-            if ".DS_Store" not in item.file and ".claude/" not in item.file
-        ]
+        # 忽略 .DS_Store 和 .claude 目录，以及由 git check-ignore 确认忽略的文件
+        filtered_items = []
+        for item in result["items"]:
+            if ".DS_Store" in item.file or ".claude/" in item.file:
+                continue
+            
+            # 双重检查：如果 git status 报告了它，但 git check-ignore 说它被忽略了，则跳过
+            if self._is_path_ignored(item.file):
+                continue
+                
+            filtered_items.append(item)
 
         result["is_clean"] = (
             len(filtered_items) == 0
@@ -278,6 +284,21 @@ class GitStatusChecker:
             suggestions.append("")
 
         return suggestions
+
+    def _is_path_ignored(self, file_path: str) -> bool:
+        """
+        检查文件是否被 git 忽略 (双重检查)
+        
+        Args:
+            file_path: 文件路径
+            
+        Returns:
+            是否被忽略
+        """
+        # 使用 git check-ignore 检查
+        # 如果返回 0，说明被忽略；返回 1，说明未被忽略
+        result = self._run_git(["check-ignore", "-q", file_path], check=False)
+        return result["success"]
 
 
 def main():
